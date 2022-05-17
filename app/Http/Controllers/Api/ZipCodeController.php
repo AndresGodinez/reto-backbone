@@ -20,6 +20,6 @@ class ZipCodeController extends Controller
             ]);
         }
 
-        return response()->json(['data' => new ZipCodeCollection($result)]);
+        return new ZipCodeCollection($result);
     }
 }
