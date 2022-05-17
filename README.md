@@ -1,56 +1,49 @@
+<p align="center"><a href="https://consiss.com/" target="_blank"><img src="https://carvaz.com/images/CARVAZ.png" width="400"></a></p>
 
-## Backbone challenge
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Pasos de análisis
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- Descarga de información del [sitio](https://www.correosdemexico.gob.mx/SSLServicios/ConsultaCP/CodigoPostal_Exportar.aspx). Se opta por un tipo de archivo txt
+- Importación de la información de un archivo TXT se crea un comando de consola para hacer la importación 
+desestructurar la información del archivo y después ingresarla a través de un modelo, pudo haber sido directa la importación usando el facade DB con el método insert, pero en esta ocasión 
+por fines prácticos se optó por el uso del modelo. (El comando se puede usar de forma externa o dentro del seeder) "php artisan import:zipcodes"
+- Creación de RDS en aws
+- importación de la información a través del comando descrito anteriormente
+- Se crea un test para empezar el deploy de la aplicación. el test se encuentra en la carpeta tests/Feature/ZipCodeTest.php
+- Creación de rutas en la api, para fines de este ejercicio es de acceso público. Lo recomendable es establecer un sistema de autenticación basado en tokens.
+- Resolución de performance Lo principal es no usar eloquent en lugar es utilizar el facade DB en lugar de eloquent, 
+al momento de hacer la búsqueda, en este caso no se implementó un "HTTP Request" para validación antes de llegar al cuerpo del controlador debido a qué esto ocasionaría 
+una consulta más, y la intención del ejercicio es que la respuesta sea más rápida.
+- Para la transformación de la data se implementó un Resource, que es una capa intermedia entre el controlador y la respuesta al cliente, dando la oportunidad de formatear y/o acomodar la información, 
+se implementó de forma parcial la estructura de respuesta con el standard JSON API que indica que la respuesta de un solo elemento debe de estar en el content de respuesta dentro de la propiedad data,
+no sé implemento la especificación de meta por falta de información, así como "relations"
+- creación de EC2 en aws
+- despliegue de aplicación desde EC2 usando este repositorio
+- configuración de NGINX para el despliegue de la aplicación
+- apuntar un de DNS hacia la ip del EC2
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## SETUP
 
-## Learning Laravel
+### Clonar repositorio:
+- git clone https://github.com/AndresGodinez/reto-backbone.git
+### Crear RDS en AWS
+[información](https://docs.aws.amazon.com/es_es/AmazonRDS/latest/UserGuide/CHAP_Tutorials.WebServerDB.CreateDBInstance.html)
+### Crear EC2 en AWS
+[Información](https://aws.amazon.com/es/getting-started/hands-on/deploy-wordpress-with-amazon-rds/3/)
+### Setup LARAVEL
++ Ir a la raiz del proyecto:
++ composer install
++ configuration de .env
++ Permisos de escritura en la carpeta storage sudo chmod -R 775 storage && sudo chgrp -R www-data storage
++ Ejecutar las migraciones de la base de datos y seeders: php artisan migrate --seed
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Autores ✒️
 
-## Laravel Sponsors
+* **Andrés Godínez**  - [AndresGodinez](https://github.com/AndresGodinez)
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
 
-### Premium Partners
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+## Licencia 📄
 
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+* [MIT License](https://es.wikipedia.org/wiki/Licencia_MIT)
